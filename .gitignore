@@ -1,6 +1,6 @@
 #pragma config(Sensor, dgtl1,  EncoderL,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  EncoderR,       sensorQuadEncoder)
-// #pragma config(Sensor, dgtl5,  EncoderT,       sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  EncoderT,       sensorQuadEncoder)
 #pragma config(Motor,  port2,           leftDirect,    tmotorVex393HighSpeed_MC29, openLoop, encoderPort, dgtl1)
 #pragma config(Motor,  port3,           leftChain,     tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, dgtl1)
 #pragma config(Motor,  port4,           rightDirect,   tmotorVex393HighSpeed_MC29, openLoop, encoderPort, dgtl3)
@@ -17,7 +17,7 @@
 #pragma platform(VEX2)
 #include "VEX_competition_Includes.c"
 
-int EState;
+// int EState;
 
 void pre_auton()
 {
@@ -30,16 +30,14 @@ task autonomous()
 {
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = 127;
-		wait1Msec(1750)
 	
 	motor[TM] = 127;
-		wait1Msec(750)
+		wait1Msec(750);
 	motor[TM] = 0;
     
 	motor[mgmLeft] = motor[mgmRight] = 127;
-		wait1Msec(1000)
+		wait1Msec(500);
 	motor[mgmLeft] = motor[mgmRight] = 0;
-  
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0;
 
@@ -49,13 +47,13 @@ task autonomous()
 	
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = -127;
-		wait1Msec(2000)
+		wait1Msec(2000);
 	motor[rightChain] = motor[rightDirect] = 0;
-	motor[leftChain] = motor[leftDirect] = 0
+	motor[leftChain] = motor[leftDirect] = 0;
 	
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = 127;
-		wait1Msec(4500)
+		wait1Msec(4500);
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0;
 }
@@ -94,7 +92,7 @@ task usercontrol()
 			motor[TM] = -127;
 			
 		if( vexRT[Btn5U] == 0 && vexRT[Btn5D] == 0 )
-			motor[TM] = 9;
+			motor[TM] = 10;
 		
 		//if( vexRT[Btn5U] == 0 && vexRT[Btn5D] == 0)
 		//	EState = EncoderT;
