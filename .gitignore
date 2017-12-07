@@ -93,7 +93,7 @@ task usercontrol()
 			motor[TM] = -127;
 			
 		if( vexRT[Btn5U] == 0 && vexRT[Btn5D] == 0 )
-			motor[TM] = 7;
+			motor[TM] = 9;
 
 
 		if( vexRT[Btn7U] == 1) // code to control claw. left side front buttons.
