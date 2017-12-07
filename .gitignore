@@ -29,32 +29,32 @@ task autonomous()
 {
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = 127;
-	  wait1Msec(1750)
+		wait1Msec(1750)
 	
 	motor[TM] = 127;
-	  wait1Msec(750)
-  motor[TM] = 0;
+		wait1Msec(750)
+	motor[TM] = 0;
     
-	motor[mgmLeft] = motor[mgmRight] = -127;
-	  wait1Msec(1000)
-  motor[mgmLeft] = motor[mgmRight] = 0;
+	motor[mgmLeft] = motor[mgmRight] = 127;
+		wait1Msec(1000)
+	motor[mgmLeft] = motor[mgmRight] = 0;
   
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0;
 
-	motor[mgmLeft] = motor[mgmRight] = 63;
-	  wait1Msec(1000);
+	motor[mgmLeft] = motor[mgmRight] = -63;
+		wait1Msec(1000);
 	motor[mgmLeft] = motor[mgmRight] = 0;
 	
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = -127;
-	  wait1Msec(2000)
+		wait1Msec(2000)
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0
 	
 	motor[rightChain] = motor[rightDirect] = 127;
 	motor[leftChain] = motor[leftDirect] = 127;
-  	wait1Msec(4500)
+		wait1Msec(4500)
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0;
 }
@@ -69,6 +69,7 @@ task usercontrol()
 			motor[rightChain] = motor[rightDirect] = vexRT[Ch2];
 		else
 			motor[rightChain] = motor[rightDirect] = 0;
+			
 		if ( abs ( vexRT[Ch3] ) > 20)
 			motor[leftChain] = motor[leftDirect] = vexRT[Ch3];
 		else
@@ -77,25 +78,31 @@ task usercontrol()
 
 		if( vexRT[Btn6U] == 1) //Code to control Mobile Goal Manipulator. Right side Rear buttons.
 			motor[mgmLeft] = motor[mgmRight] = 127;
+			
 		if ( vexRT[Btn6D] == 1)
 			motor[mgmLeft] = motor[mgmRight] = -63;
-		if( vexRT[Btn6U]==0 && vexRT[Btn6D] == 0 )
+			
+		if( vexRT[Btn6U] == 0 && vexRT[Btn6D] == 0 )
 			motor[mgmLeft] = motor[mgmRight] = 0;
 
 
 		if( vexRT[Btn5U] == 1) // Code to control chain bar. Left side rear buttons.
 			motor[TM] = 127;
+			
 		if( vexRT[Btn5D] == 1)
 			motor[TM] = -127;
+			
 		if( vexRT[Btn5U] == 0 && vexRT[Btn5D] == 0 )
 			motor[TM] = 7;
 
 
 		if( vexRT[Btn7U] == 1) // code to control claw. left side front buttons.
 			motor[Claw] =  127;
+			
 		if( vexRT[Btn7D] == 1)
 			motor[Claw] = -127;
-		if( vexRT[Btn7U]==0 && vexRT[Btn7D] == 0 )
+			
+		if( vexRT[Btn7U] == 0 && vexRT[Btn7D] == 0 )
 			motor[Claw] = 0;
 	}
 }
