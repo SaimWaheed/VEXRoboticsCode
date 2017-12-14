@@ -49,7 +49,7 @@ task autonomous()
 
 	motor[rightChain] = motor[rightDirect] = 127; // Right Chain Go Forward (Left Turn)
 	motor[leftChain] = motor[leftDirect] = -127; // Left Chain Go Backwards (Left Turn)
-		wait1Msec(1050); // For 1.025 Seconds
+		wait1Msec(975); // For 1.025 Seconds
 	motor[rightChain] = motor[rightDirect] = 0; // Stop Left Chain
 	motor[leftChain] = motor[leftDirect] = 0; //  Stop Right Chain
 
@@ -66,6 +66,10 @@ task autonomous()
 	motor[Claw] = -127;
 		wait1Msec(500); //Stop to drop cone
 	motor[Claw] = 0;
+		motor[TM] = 127;
+		wait1Msec(250);
+	motor[TM] = 0;
+	
 
 	motor[rightChain] = motor[rightDirect] = 0;
 	motor[leftChain] = motor[leftDirect] = 0;
