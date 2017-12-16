@@ -18,54 +18,97 @@
 #pragma platform(VEX2)
 #include "VEX_competition_Includes.c"
 
+void driveStraightDistance(int ticks, int masterPower)
+{
+  //int tickGoal = (42 * tenthsOfIn) / 10;
+ int tickGoal = ticks;
+ 
+  //This will count up the total encoder ticks despite the fact that the encoders are constantly reset.
+  int totalTicks = 0;
+ 
+  //Initialise slavePower as masterPower - 5 so we don't get huge error for the first few iterations. The
+  //-5 value is based off a rough guess of how much the motors are different, which prevents the robot from
+  //veering off course at the start of the function.
+  int slavePower = masterPower - 5; 
+ 
+  int error = 0;
+ 
+  int kp = 5;
+ 
+  SensorValue[EncoderL] = 0;
+  SensorValue[EncoderR] = 0;
+ 
+  //Monitor 'totalTicks', instead of the values of the encoders which are constantly reset.
+  while(abs(totalTicks) < tickGoal)
+  {
+    //Proportional algorithm to keep the robot going straight.
+  	motor[rightChain] = motor[rightDirect] = masterPower;
+	motor[leftChain] = motor[leftDirect] = slavePower;
+ 
+    error = SensorValue[leftEncoder] - SensorValue[rightEncoder];
+ 
+    slavePower += error / kp;
+ 
+
+  SensorValue[EncoderL] = 0;
+  SensorValue[EncoderR] = 0;
+ 
+    wait1Msec(100);
+ 
+    //Add this iteration's encoder values to totalTicks.
+    totalTicks+= SensorValue[EncoderL];
+  }
+  	motor[rightChain] = motor[rightDirect] = 127;
+	motor[leftChain] = motor[leftDirect] = 127;
+}
 
 void turnRightDeg(int degrees, int power)
 {
   //Reset encoders
-  SensorValue[leftEncoder] = 0;
-  SensorValue[rightEncoder] = 0;
+  SensorValue[EncoderL] = 0;
+  SensorValue[EncoderR] = 0;
  
   //Determine tickGoal
   int tickGoal = (23 * degrees) / 10;
  
   //Start the motors in a left point turn.
-  motor[leftServo] = power;
-  motor[rightServo] = -1 * power;
+  	motor[rightChain] = motor[rightDirect] = power;
+	motor[leftChain] = motor[leftDirect] = -1* power;
  
   //Since the wheels may go at slightly different speeds due to manufacturing tolerances, etc., 
   //we need to test both encoders and control both motors separately. This may result in one motor
   //going for longer than another but it will ultimately result in a much more accurate turn.
-  while(SensorValue[leftEncoder] < tickGoal || SensorValue[rightEncoder] > -1 * tickGoal) {
-    if(SensorValue[leftEncoder] > tickGoal) {motor[leftServo] = 0;}
-    if(SensorValue[rightEncoder] < -1 * tickGoal) {motor[rightServo] = 0;}
+  while(SensorValue[EncoderL] < tickGoal || SensorValue[EncoderR] > -1 * tickGoal) {
+    if(SensorValue[EncoderL] > tickGoal) {motor[EncoderL] = 0;}
+    if(SensorValue[EncoderR] < -1 * tickGoal) {motor[EncoderR] = 0;}
   }
   //Make sure both motors stop at the end of the turn.
-  motor[leftServo] = 0;
-  motor[rightServo] = 0;
+	motor[rightChain] = motor[rightDirect] = 127; // Go Forward Full Speed To Mobile Goal
+	motor[leftChain] = motor[leftDirect] = 127;
 }
 void turnLeftDeg(int degrees, int power)
 {
   //Reset encoders
-  SensorValue[leftEncoder] = 0;
-  SensorValue[rightEncoder] = 0;
+  SensorValue[EncoderL] = 0;
+  SensorValue[EncoderR] = 0;
  
   //Determine tickGoal
   int tickGoal = (23 * degrees) / 10;
  
   //Start the motors in a left point turn.
-  motor[leftServo] = -1 * power;
-  motor[rightServo] = power;
+  	motor[rightChain] = motor[rightDirect] = -1*power;
+	motor[leftChain] = motor[leftDirect] = power;
  
   //Since the wheels may go at slightly different speeds due to manufacturing tolerances, etc., 
   //we need to test both encoders and control both motors separately. This may result in one motor
   //going for longer than another but it will ultimately result in a much more accurate turn.
-  while(SensorValue[rightEncoder] < tickGoal || SensorValue[leftEncoder] > -1 * tickGoal) {
-    if(SensorValue[rightEncoder] > tickGoal) {motor[rightServo] = 0;}
-    if(SensorValue[leftEncoder] < -1 * tickGoal) {motor[leftServo] = 0;}
+while(SensorValue[EncoderL] < tickGoal || SensorValue[EncoderR] > -1 * tickGoal) {
+    if(SensorValue[EncoderL] > tickGoal) {motor[EncoderL] = 0;}
+    if(SensorValue[EncoderR] < -1 * tickGoal) {motor[EncoderR] = 0;}
   }
   //Make sure both motors stop at the end of the turn.
-  motor[leftServo] = 0;
-  motor[rightServo] = 0;
+	motor[rightChain] = motor[rightDirect] = 127; // Go Forward Full Speed To Mobile Goal
+	motor[leftChain] = motor[leftDirect] = 127;
 }
 
 
@@ -152,19 +195,19 @@ task usercontrol()
 {
 	while(true)
 	{
-		if ((vexRT[Ch3]) || (vexRT[Ch4])) // arcade DT code
+		if ((vexRT[Ch3Xmtr2]) || (vexRT[Ch4Xmtr2])) // arcade DT code
 		{
-			motor[leftDirect] = motor[leftChain] = vexRT[Ch3] + vexRT[Ch4];
-			motor[rightDirect] = motor[rightChain] = vexRT[Ch3] - vexRT[Ch4];
+			motor[rightDirect] = motor[rightChain] = vexRT[Ch3Xmtr2] - vexRT[Ch4Xmtr2];
+			motor[leftDirect] = motor[leftChain] = vexRT[Ch3Xmtr2] + vexRT[Ch4Xmtr2];
 		}
 
-		if( vexRT[Btn6UXmtr2] == 1) //Code to control Mobile Goal Manipulator. Right side Rear buttons.
+		if( vexRT[Btn6U] == 1) //Code to control Mobile Goal Manipulator. Right side Rear buttons.
 			motor[mgmLeft] = motor[mgmRight] = 60;
 
-		if ( vexRT[Btn6DXmtr2] == 1)
+		if ( vexRT[Btn6D] == 1)
 			motor[mgmLeft] = motor[mgmRight] = -127;
 
-		if( vexRT[Btn6UXmtr2]==0 && vexRT[Btn6DXmtr2] == 0 )
+		if( vexRT[Btn6U]==0 && vexRT[Btn6D] == 0 )
 			motor[mgmLeft] = motor[mgmRight] = 0;
 
 		if(nMotorEncoder[mgmLeft] > 100) // two values used for encoders. first val here is the threshold
@@ -175,13 +218,13 @@ task usercontrol()
 			}
 		}
 
-		if( abs(vexRT[Ch2Xmtr2]) > 20) // Code to control chain bar. Left side rear buttons.
-			motor[TM] = vexRT[Ch2Xmtr2];
+		if( abs(vexRT[Ch2]) > 20) // Code to control chain bar. Left side rear buttons.
+			motor[TM] = vexRT[Ch2];
 
-		if(SensorValue[EncoderT] >= -122 && abs(vexRT[Ch2Xmtr2])< 20)
+		if(SensorValue[EncoderT] >= -122 && abs(vexRT[Ch2])< 20)
 			motor[TM] = 10;
 
-		if(SensorValue[EncoderT] < -122 && abs(vexRT[Ch2Xmtr2]) < 20)
+		if(SensorValue[EncoderT] < -122 && abs(vexRT[Ch2]) < 20)
 			motor[TM] = -10;
 
 		if( vexRT[Btn5UXmtr2] == 1) // code to control claw. left side front buttons.
