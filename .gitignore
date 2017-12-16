@@ -152,19 +152,19 @@ task usercontrol()
 {
 	while(true)
 	{
-		if ((vexRT[Ch3]) || (vexRT[Ch4])) // arcade DT code
+		if ((vexRT[Ch3Xmtr2]) || (vexRT[Ch4Xmtr2])) // arcade DT code
 		{
-			motor[leftDirect] = motor[leftChain] = vexRT[Ch3] + vexRT[Ch4];
-			motor[rightDirect] = motor[rightChain] = vexRT[Ch3] - vexRT[Ch4];
+			motor[rightDirect] = motor[rightChain] = vexRT[Ch3Xmtr2] - vexRT[Ch4Xmtr2];
+			motor[leftDirect] = motor[leftChain] = vexRT[Ch3Xmtr2] + vexRT[Ch4Xmtr2];
 		}
 
-		if( vexRT[Btn6UXmtr2] == 1) //Code to control Mobile Goal Manipulator. Right side Rear buttons.
+		if( vexRT[Btn6U] == 1) //Code to control Mobile Goal Manipulator. Right side Rear buttons.
 			motor[mgmLeft] = motor[mgmRight] = 60;
 
-		if ( vexRT[Btn6DXmtr2] == 1)
+		if ( vexRT[Btn6D] == 1)
 			motor[mgmLeft] = motor[mgmRight] = -127;
 
-		if( vexRT[Btn6UXmtr2]==0 && vexRT[Btn6DXmtr2] == 0 )
+		if( vexRT[Btn6U]==0 && vexRT[Btn6D] == 0 )
 			motor[mgmLeft] = motor[mgmRight] = 0;
 
 		if(nMotorEncoder[mgmLeft] > 100) // two values used for encoders. first val here is the threshold
@@ -175,13 +175,13 @@ task usercontrol()
 			}
 		}
 
-		if( abs(vexRT[Ch2Xmtr2]) > 20) // Code to control chain bar. Left side rear buttons.
-			motor[TM] = vexRT[Ch2Xmtr2];
+		if( abs(vexRT[Ch2]) > 20) // Code to control chain bar. Left side rear buttons.
+			motor[TM] = vexRT[Ch2];
 
-		if(SensorValue[EncoderT] >= -122 && abs(vexRT[Ch2Xmtr2])< 20)
+		if(SensorValue[EncoderT] >= -122 && abs(vexRT[Ch2])< 20)
 			motor[TM] = 10;
 
-		if(SensorValue[EncoderT] < -122 && abs(vexRT[Ch2Xmtr2]) < 20)
+		if(SensorValue[EncoderT] < -122 && abs(vexRT[Ch2]) < 20)
 			motor[TM] = -10;
 
 		if( vexRT[Btn5UXmtr2] == 1) // code to control claw. left side front buttons.
