@@ -45,7 +45,7 @@ void driveStraightDistance(int ticks, int masterPower)
   	motor[rightChain] = motor[rightDirect] = masterPower;
 	motor[leftChain] = motor[leftDirect] = slavePower;
  
-    error = SensorValue[leftEncoder] - SensorValue[rightEncoder];
+    error = SensorValue[EncoderL] - SensorValue[EncoderR];
  
     slavePower += error / kp;
  
@@ -227,13 +227,15 @@ task usercontrol()
 		if(SensorValue[EncoderT] < -122 && abs(vexRT[Ch2]) < 20)
 			motor[TM] = -10;
 
-		if( vexRT[Btn5UXmtr2] == 1) // code to control claw. left side front buttons.
+		if( vexRT[Btn6UXmtr2] == 1) // code to control claw. left side front buttons.
 			motor[Claw] =  127;
 
-		if( vexRT[Btn5DXmtr2] == 1)
+		if( vexRT[Btn6DXmtr2] == 1)
 			motor[Claw] = -127;
 
-		if( vexRT[Btn5DXmtr2]==0 && vexRT[Btn5DXmtr2] == 0 )
+		if( vexRT[Btn6DXmtr2]==0 && vexRT[Btn6DXmtr2] == 0 )
 			motor[Claw] = 0;
 	}
 }
+
+//Tower 47 ticks
